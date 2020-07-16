@@ -1,6 +1,8 @@
 package hu.idevelopment.bikeforge;
 
-import hu.idevelopment.bikeforge.machine.*;
+import hu.idevelopment.bikeforge.machine.Machine;
+import hu.idevelopment.bikeforge.machine.MachineFactory;
+import hu.idevelopment.bikeforge.machine.MachineType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,30 +25,10 @@ public class Factory {
     private void addMachines(MachineType type, int count) {
         List<Machine> machineList = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
-            Machine machine;
-            switch (type) {
-                case CURVE:
-                    machine = new CurveMachine(i);
-                    break;
-                case CUT:
-                    machine = new CutMachine(i);
-                    break;
-                case PACK:
-                    machine = new PackMachine(i);
-                    break;
-                case PAINT:
-                    machine = new PaintMachine(i);
-                    break;
-                case TEST:
-                    machine = new TestMachine(i);
-                    break;
-                case WELD:
-                    machine = new WeldMachine(i);
-                    break;
-                default:
-                    machine = null;
+            Machine machine = MachineFactory.createMachine(type, i);
+            if (machine != null) {
+                machineList.add(machine);
             }
-            machineList.add(machine);
         }
         particularMachines.add(machineList);
     }
