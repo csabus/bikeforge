@@ -1,4 +1,4 @@
-package hu.idevelopment.bikeforge.zolaStuff;
+package hu.idevelopment.bikeforge.zola_stuff;
 
 public class Main {
 

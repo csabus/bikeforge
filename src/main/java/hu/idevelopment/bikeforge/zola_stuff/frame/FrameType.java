@@ -1,6 +1,6 @@
-package hu.idevelopment.bikeforge.zolaStuff.frame;
+package hu.idevelopment.bikeforge.zola_stuff.frame;
 
-import hu.idevelopment.bikeforge.zolaStuff.constant_values.ConstantValues;
+import hu.idevelopment.bikeforge.zola_stuff.constant_values.ConstantValues;
 
 public enum FrameType {
 

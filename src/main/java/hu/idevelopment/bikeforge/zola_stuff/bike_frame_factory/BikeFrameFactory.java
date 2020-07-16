@@ -1,6 +1,6 @@
-package hu.idevelopment.bikeforge.zolaStuff.bike_frame_factory;
+package hu.idevelopment.bikeforge.zola_stuff.bike_frame_factory;
 
-import hu.idevelopment.bikeforge.zolaStuff.constant_values.ConstantValues;
+import hu.idevelopment.bikeforge.zola_stuff.constant_values.ConstantValues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
