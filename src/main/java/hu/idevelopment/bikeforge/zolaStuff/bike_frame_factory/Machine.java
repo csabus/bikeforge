@@ -1,4 +1,4 @@
-package hu.progmasters.bike_frame_factory;
+package hu.idevelopment.bikeforge.zolaStuff.bike_frame_factory;
 
 public class Machine {
     private final MachineType machineType;

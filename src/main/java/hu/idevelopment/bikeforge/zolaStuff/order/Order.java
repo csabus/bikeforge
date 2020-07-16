@@ -1,7 +1,7 @@
-package hu.progmasters.order;
+package hu.idevelopment.bikeforge.zolaStuff.order;
 
 
-import hu.progmasters.frame.FrameType;
+import hu.idevelopment.bikeforge.zolaStuff.frame.FrameType;
 
 import java.time.LocalDateTime;
 

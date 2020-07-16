@@ -1,4 +1,4 @@
-package hu.progmasters;
+package hu.idevelopment.bikeforge.zolaStuff;
 
 public class Main {
 

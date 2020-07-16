@@ -1,10 +1,10 @@
-package hu.progmasters;
+package hu.idevelopment.bikeforge.zolaStuff;
 
-import hu.progmasters.bike_frame_factory.BikeFrameFactory;
-import hu.progmasters.bike_frame_factory.MachineType;
-import hu.progmasters.constant_values.ConstantValues;
-import hu.progmasters.frame.FrameType;
-import hu.progmasters.order.Order;
+import hu.idevelopment.bikeforge.zolaStuff.bike_frame_factory.BikeFrameFactory;
+import hu.idevelopment.bikeforge.zolaStuff.bike_frame_factory.MachineType;
+import hu.idevelopment.bikeforge.zolaStuff.constant_values.ConstantValues;
+import hu.idevelopment.bikeforge.zolaStuff.frame.FrameType;
+import hu.idevelopment.bikeforge.zolaStuff.order.Order;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package hu.progmasters.constant_values;
+package hu.idevelopment.bikeforge.zolaStuff.constant_values;
 
 import java.time.LocalDateTime;
 
