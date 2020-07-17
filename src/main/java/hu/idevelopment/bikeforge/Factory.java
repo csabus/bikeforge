@@ -1,38 +1,22 @@
 package hu.idevelopment.bikeforge;
 
-import hu.idevelopment.bikeforge.machine.Machine;
-import hu.idevelopment.bikeforge.machine.MachineFactory;
-import hu.idevelopment.bikeforge.machine.MachineType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
 public class Factory {
-    //private final ProductionLine productionLine = new ProductionLine();
-    private final List<List<Machine>> particularMachines = new ArrayList<>();
+    private final ProductionLine productionLine;
+    private final OrderList orderList;
 
-    public Factory() {
-        addMachines(MachineType.CUT, 6);
-        addMachines(MachineType.CURVE, 2);
-        addMachines(MachineType.WELD, 3);
-        addMachines(MachineType.TEST, 1);
-        addMachines(MachineType.PAINT, 4);
-        addMachines(MachineType.PACK, 3);
+    @Autowired
+    public Factory(ProductionLine productionLine, OrderList orderList) {
+        this.productionLine = productionLine;
+        this.orderList = orderList;
     }
-
-    private void addMachines(MachineType type, int count) {
-        List<Machine> machineList = new ArrayList<>();
-        for (int i = 1; i <= count; i++) {
-            Machine machine = MachineFactory.createMachine(type, i);
-            if (machine != null) {
-                machineList.add(machine);
-            }
-        }
-        particularMachines.add(machineList);
-    }
-
 
     /*public int getProductionTime(ProductType productType) {
         int productionTime = 0;
@@ -44,37 +28,63 @@ public class Factory {
     }*/
 
     public int getProductionTimeForOrder(Order order) {
-        int slowestMachineIndex = getSlowestMachineIndex(order);
-        int productionTime = sumProductionTime(order.getProductType(), 0, slowestMachineIndex);
-        productionTime += sumProductionTime(order.getProductType(), slowestMachineIndex, slowestMachineIndex + 1) * order.getQuantity();
-        productionTime += sumProductionTime(order.getProductType(), slowestMachineIndex + 1, particularMachines.size());
-        return productionTime;
+        return productionLine.getProductionTimeForOrder(order);
     }
 
-    private int getSlowestMachineIndex(Order order) {
-        int index = 0;
-        int slowestMachineIndex = 0;
-        double minimumSpeed = Double.MAX_VALUE;
-        for (List<Machine> machineList : particularMachines) {
-            double cumulatedSpeed = machineList.get(0).getSpeed(order.getProductType()) * machineList.size();
-            if (cumulatedSpeed < minimumSpeed) {
-                minimumSpeed = cumulatedSpeed;
-                slowestMachineIndex = index;
+    public void findOptimalSequence() {
+        calculateActualDeadlines();
+        List<Order> optimalOrderList = orderList.getOrders();
+        double maxProfit = orderList.calculateProfit();
+        boolean isOptimal = false;
+        while (!isOptimal) {
+            int numberOfChanges = 0;
+            for (int i = 0; i < orderList.getOrders().size() - 1; i++) {
+                orderList.replaceItems(i, i + 1);
+                calculateActualDeadlines();
+                double actualProfit = orderList.calculateProfit();
+                if (actualProfit > maxProfit) {
+                    maxProfit = actualProfit;
+                    optimalOrderList = orderList.getOrders();
+                    numberOfChanges++;
+                } else {
+                    orderList.replaceItems(i + 1, i);
+                }
             }
-            index++;
+            if (numberOfChanges == 0) {
+                isOptimal = true;
+            }
         }
-        return slowestMachineIndex;
+        orderList.setOrders(optimalOrderList);
+        System.out.println(maxProfit);
     }
 
-    private int sumProductionTime(ProductType productType, int from, int to) {
-        int productionTime = 0;
-        for (int i = from; i < to; i++) {
-            Machine machine = particularMachines.get(i).get(0);
-            int machineCount = particularMachines.get(i).size();
-            double cumulatedSpeed = machine.getSpeed(productType) * machineCount;
-            productionTime += 1 / cumulatedSpeed;
+    private void calculateActualDeadlines() {
+        LocalDateTime startDate = LocalDateTime.of(2020, 7, 20, 6, 0, 0);
+        for (Order order : orderList.getOrders()) {
+            int productionTime = getProductionTimeForOrder(order);
+            startDate = calculateEndDateTime(startDate, productionTime);
+            order.setActualDeadline(startDate);
         }
-        return productionTime;
     }
+
+    private LocalDateTime calculateEndDateTime(LocalDateTime startDate, long minutes) {
+        LocalDateTime dayStart = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 6, 0, 0);
+        LocalDateTime startDayEnd = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 22, 0, 0);
+        long dayRemainMinutes = ChronoUnit.MINUTES.between(startDate, startDayEnd);
+        if (minutes <= dayRemainMinutes) {
+            return startDate.plusMinutes(minutes);
+        }
+
+        long remainMinutes = minutes - dayRemainMinutes;
+        while (remainMinutes > 0) {
+            dayStart = dayStart.plusDays(1);
+            startDayEnd = LocalDateTime.of(dayStart.getYear(), dayStart.getMonth(), dayStart.getDayOfMonth(), 22, 0, 0);
+            dayRemainMinutes = ChronoUnit.MINUTES.between(dayStart, startDayEnd);
+            remainMinutes -= dayRemainMinutes;
+        }
+
+        return dayStart.plusMinutes(960 + remainMinutes);
+    }
+
 
 }

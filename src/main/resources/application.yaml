@@ -1,0 +1,51 @@
+factory:
+  machineGroups:
+    - times:
+        - GYB: 5
+          FB: 8
+          SB: 6
+      names:
+        - VÁGÓ-1
+        - VÁGÓ-2
+        - VÁGÓ-3
+        - VÁGÓ-4
+        - VÁGÓ-5
+        - VÁGÓ-6
+    - times:
+        - GYB: 10
+          FB: 16
+          SB: 15
+      names:
+        - HAJLÍTÓ-1
+        - HAJLÍTÓ-2
+    - times:
+        - GYB: 8
+          FB: 12
+          SB: 10
+      names:
+        - HEGESZTŐ-1
+        - HEGESZTÓ-2
+        - HEGESZTÓ-3
+    - times:
+        - GYB: 5
+          FB: 5
+          SB: 5
+      names:
+        - TESZTELŐ-1
+    - times:
+        - GYB: 12
+          FB: 20
+          SB: 13
+      names:
+        - FESTŐ-1
+        - FESTŐ-2
+        - FESTŐ-3
+        - FESTŐ-4
+    - times:
+        - GYB: 10
+          FB: 15
+          SB: 12
+      names:
+        - CSOMAGOLÓ-1
+        - CSOMAGOLÓ-2
+        - CSOMAGOLÓ-3

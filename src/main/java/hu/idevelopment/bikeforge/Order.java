@@ -2,6 +2,7 @@ package hu.idevelopment.bikeforge;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.InputMismatchException;
 
 public class Order {
@@ -12,6 +13,7 @@ public class Order {
     private LocalDateTime deadline;
     private long profit;
     private long penalty;
+    private LocalDateTime actualDeadline;
 
     private Order() {
     }
@@ -53,6 +55,28 @@ public class Order {
         return quantity;
     }
 
+    public void setActualDeadline(LocalDateTime actualDeadline) {
+        this.actualDeadline = actualDeadline;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public double getActualProfit() {
+        double actualPenalty = calculatePenalty();
+        return profit * quantity - actualPenalty;
+    }
+
+    private double calculatePenalty() {
+        if (actualDeadline.isAfter(deadline)) {
+            long delayMinutes = ChronoUnit.MINUTES.between(deadline, actualDeadline);
+            return (delayMinutes / 1440.) * penalty;
+        } else {
+            return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -62,6 +86,7 @@ public class Order {
                 ", deadline=" + deadline +
                 ", profit=" + profit +
                 ", penalty=" + penalty +
+                ", actualDeadline=" + actualDeadline +
                 '}';
     }
 }
