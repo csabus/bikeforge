@@ -1,9 +1,13 @@
-package hu.idevelopment.bikeforge;
+package hu.idevelopment.bikeforge.order;
+
+import hu.idevelopment.bikeforge.product.ProductType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 
 public class Order {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm");
@@ -14,6 +18,8 @@ public class Order {
     private long profit;
     private long penalty;
     private LocalDateTime actualDeadline;
+    private final List<OrderItem> orderItems = new ArrayList<>();
+    private LocalDateTime actualStartTime;
 
     private Order() {
     }
@@ -25,6 +31,9 @@ public class Order {
         this.deadline = deadline;
         this.profit = profit;
         this.penalty = penalty;
+        for (int i = 0; i < quantity; i++) {
+            orderItems.add(new OrderItem(productType));
+        }
     }
 
     public static Order newOrder(String inputLine) {
@@ -64,17 +73,46 @@ public class Order {
     }
 
     public double getActualProfit() {
-        double actualPenalty = calculatePenalty();
+        double actualPenalty = getActualPenalty();
+        //System.out.println(id + ": " + (profit * quantity - actualPenalty));
         return profit * quantity - actualPenalty;
     }
 
-    private double calculatePenalty() {
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public double getActualPenalty() {
         if (actualDeadline.isAfter(deadline)) {
             long delayMinutes = ChronoUnit.MINUTES.between(deadline, actualDeadline);
-            return (delayMinutes / 1440.) * penalty;
+            return Math.ceil(delayMinutes / 1440.) * penalty;
         } else {
             return 0;
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setActualDeadlineByLastItemFinishDate() {
+        actualDeadline = orderItems.get(orderItems.size() - 1).getFinishDate();
+    }
+
+    public LocalDateTime getLastFinishedDate() {
+        return orderItems.get(orderItems.size() - 1).getFinishDate();
+    }
+
+    public LocalDateTime getActualStartTime() {
+        return actualStartTime;
+    }
+
+    public void setActualStartTime(LocalDateTime actualStartTime) {
+        this.actualStartTime = actualStartTime;
+    }
+
+    public LocalDateTime getActualDeadline() {
+        return actualDeadline;
     }
 
     @Override
@@ -87,6 +125,7 @@ public class Order {
                 ", profit=" + profit +
                 ", penalty=" + penalty +
                 ", actualDeadline=" + actualDeadline +
-                '}';
+                ", actualStartTime=" + actualStartTime +
+                "}\n";
     }
 }

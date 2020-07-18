@@ -1,4 +1,4 @@
-package hu.idevelopment.bikeforge;
+package hu.idevelopment.bikeforge.order;
 
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class OrderList {
     }
 
     public List<Order> getOrders() {
-        return List.copyOf(orders);
+        return orders;
     }
 
     public void setOrders(List<Order> orders) {
@@ -43,6 +43,14 @@ public class OrderList {
             profit += order.getActualProfit();
         }
         return profit;
+    }
+
+    public int getOrderCount() {
+        return orders.size();
+    }
+
+    public Order getOrder(int index) {
+        return orders.get(index);
     }
 
     @Override

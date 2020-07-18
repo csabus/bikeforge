@@ -1,5 +1,8 @@
 package hu.idevelopment.bikeforge;
 
+import hu.idevelopment.bikeforge.factory.BikeFactory;
+import hu.idevelopment.bikeforge.order.OrderList;
+import hu.idevelopment.bikeforge.output.Summary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,13 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BikeforgeApplication implements CommandLineRunner {
-    private final Factory factory;
+    private final BikeFactory factory;
     private final OrderList orderList;
+    private final Summary summary;
 
     @Autowired
-    public BikeforgeApplication(Factory factory, OrderList orderList) {
+    public BikeforgeApplication(BikeFactory factory, OrderList orderList, Summary summary) {
         this.factory = factory;
         this.orderList = orderList;
+        this.summary = summary;
     }
 
     public static void main(String[] args) {
@@ -22,6 +27,8 @@ public class BikeforgeApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        long start = System.nanoTime();
+
         if (args.length == 1) {
             try {
                 String orderInputFile = args[0];
@@ -32,22 +39,10 @@ public class BikeforgeApplication implements CommandLineRunner {
         } else {
             System.out.println("Missing input file");
         }
-
         factory.findOptimalSequence();
+        //factory.buildWorkflow();
+        factory.startProductionSimulation();
+        summary.printResult(orderList);
+        System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
     }
-
-    /*private void readInput(String inputFileName) {
-        Path path = Paths.get(inputFileName);
-        List<String> lines = new ArrayList<>();
-        try {
-            lines = Files.readAllLines(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (String line : lines) {
-            Order order = Order.newOrder(line);
-            System.out.println(factory.getProductionTimeForOrder(order));
-        }
-
-    }*/
 }
