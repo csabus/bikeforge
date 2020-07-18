@@ -36,6 +36,8 @@ public class ConstantValues {
     public static final int MORNING_SHIFT_BEGINS = 6;
     public static final int AFTERNOON_SHIFT_ENDS = 22;
 
+    public static final boolean WEEKEND_SHIFTS = true;
+
 
     private ConstantValues() {
     }

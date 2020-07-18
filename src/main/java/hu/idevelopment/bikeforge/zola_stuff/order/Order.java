@@ -12,9 +12,14 @@ public class Order implements Comparable<Order> {
     private final LocalDateTime deadline;
     private final int profitPerPiece;
     private final int penaltyPerDay;
+    private LocalDateTime startedAt;
+    private LocalDateTime finishedAt;
+    private int startSerialNumber;
+    private int endSerialNumber;
 
     private long totalProductionTime;
     private int productionTimeBeforeBottleneck;
+
 
     public Order(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
         this.orderId = orderId;
@@ -63,6 +68,18 @@ public class Order implements Comparable<Order> {
 
     public void setProductionTimeBeforeBottleneck(int productionTimeBeforeBottleneck) {
         this.productionTimeBeforeBottleneck = productionTimeBeforeBottleneck;
+    }
+
+    public LocalDateTime getStartedAt() {
+        return startedAt;
+    }
+
+    public LocalDateTime getFinishedAt() {
+        return finishedAt;
+    }
+
+    public int getEndSerialNumber() {
+        return endSerialNumber;
     }
 
     @Override

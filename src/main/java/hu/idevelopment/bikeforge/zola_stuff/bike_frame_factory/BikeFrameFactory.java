@@ -1,26 +1,29 @@
 package hu.idevelopment.bikeforge.zola_stuff.bike_frame_factory;
 
 import hu.idevelopment.bikeforge.zola_stuff.constant_values.ConstantValues;
+import hu.idevelopment.bikeforge.zola_stuff.frame.Frame;
+import hu.idevelopment.bikeforge.zola_stuff.order.Order;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class BikeFrameFactory {
 
-    private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{
-            ConstantValues.NUMBER_OF_CUTTERS,
-            ConstantValues.NUMBER_OF_BENDERS,
-            ConstantValues.NUMBER_OF_WELDERS,
-            ConstantValues.NUMBER_OF_TESTERS,
-            ConstantValues.NUMBER_OF_PAINTERS,
-            ConstantValues.NUMBER_OF_PACKERS});
-    private static final int START_HOUR = ConstantValues.MORNING_SHIFT_BEGINS;
-    private static final int FINISH_HOUR = ConstantValues.AFTERNOON_SHIFT_ENDS;
+    private static long minuteCounter = 0;
+
+    private static LocalDateTime timer = ConstantValues.productionStartDate;
+
     private final List<Machine> machines = new ArrayList<>();
 
-    private BikeFrameFactory(int[] numberOfMachinesPerType) {
+    private Queue<Frame> toCut = new LinkedList<>();
+    private Queue<Frame> toBend = new LinkedList<>();
+    private Queue<Frame> toWeld = new LinkedList<>();
+    private Queue<Frame> toTest = new LinkedList<>();
+    private Queue<Frame> toPaint = new LinkedList<>();
+    private Queue<Frame> toPackage = new LinkedList<>();
+
+
+    public BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
             for (int j = 0; j < numberOfMachinesPerType[i]; j++) {
                 switch (i) {
@@ -49,8 +52,18 @@ public class BikeFrameFactory {
         }
     }
 
-    public static BikeFrameFactory getInstance() {
-        return instance;
+    public void produce(List<Order> orders) {
+        createAndSerializeFrames(orders);
+
+
+    }
+
+    void createAndSerializeFrames(List<Order> orders) {
+        for (Order order : orders) {
+            for (int i = 0; i < order.getQuantity(); i++) {
+                toCut.add(new Frame(order));
+            }
+        }
     }
 
     public Map<MachineType, Double> getMachinesPerStep() {
@@ -93,14 +106,14 @@ public class BikeFrameFactory {
     }
 
     public int getWorkHours() {
-        return FINISH_HOUR - START_HOUR;
+        return ConstantValues.AFTERNOON_SHIFT_ENDS - ConstantValues.MORNING_SHIFT_BEGINS;
     }
 
     public int getStartHour() {
-        return START_HOUR;
+        return ConstantValues.MORNING_SHIFT_BEGINS;
     }
 
     public int getFinishHour() {
-        return FINISH_HOUR;
+        return ConstantValues.AFTERNOON_SHIFT_ENDS;
     }
 }

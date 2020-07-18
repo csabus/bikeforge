@@ -15,12 +15,19 @@ import java.util.Map;
 
 public class RoDSStar {
 
-    private final BikeFrameFactory bikeFrameFactory = BikeFrameFactory.getInstance();
+    private final BikeFrameFactory bikeFrameFactory = new BikeFrameFactory(new int[]{
+            ConstantValues.NUMBER_OF_CUTTERS,
+            ConstantValues.NUMBER_OF_BENDERS,
+            ConstantValues.NUMBER_OF_WELDERS,
+            ConstantValues.NUMBER_OF_TESTERS,
+            ConstantValues.NUMBER_OF_PAINTERS,
+            ConstantValues.NUMBER_OF_PACKERS});
     private final List<Order> orders = new ArrayList<>();
 
     public void sortOrdersForMaximumProfit() {
         // TODO not the final position of this method call,
         // TODO should be at the end of the method which reads the input file and fills the order list
+        // TODO SOMETHING IS NOT RIGHT WITH FINAL ORDER
         calculateProductionTimesInMinutes();
         Collections.sort(orders);
         long maxProfit = calculateProfitForCurrentOrderList();
@@ -44,6 +51,8 @@ public class RoDSStar {
                 isOptimal = true;
             }
         }
+        System.out.println("max profit: " + maxProfit);
+        orders.stream().map(Order::getOrderId).forEach(System.out::println);
     }
 
     long calculateProfitForCurrentOrderList() {
@@ -52,37 +61,43 @@ public class RoDSStar {
         long totalTimeInMinutes = 0;
         int overlapTimeInMinutes = 0;
         for (Order order : orders) {
+            System.out.println(order.getOrderId() + " start: " + calculateDateFromMinutesPassed(startTime, totalTimeInMinutes));
             totalTimeInMinutes += order.getTotalProductionTime() - overlapTimeInMinutes;
             overlapTimeInMinutes = order.getProductionTimeBeforeBottleneck();
             LocalDateTime dayFinished = calculateDateFromMinutesPassed(startTime, totalTimeInMinutes);
+            System.out.println(order.getOrderId() + " finish: " + dayFinished);
             long penalty = 0;
             if (dayFinished.isAfter(order.getDeadline())) {
-                penalty = (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear()) * order.getPenaltyPerDay();
+                penalty = (long) (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear() + 1) * order.getPenaltyPerDay();
             }
             totalProfit += order.getQuantity() * order.getProfitPerPiece() - penalty;
         }
+        System.out.println("Profit: " + totalProfit);
+        System.out.println("=============================");
         return totalProfit;
     }
 
-    private LocalDateTime calculateDateFromMinutesPassed(LocalDateTime startTime, long totalTimeInMinutes) {
+    LocalDateTime calculateDateFromMinutesPassed(LocalDateTime startTime, long totalTimeInMinutes) {
         LocalDateTime finishTime = startTime;
-        LocalDateTime lastWorkDayStarted = startTime;
         if (startTime.getHour() != 6 || startTime.getMinute() != 0) {
             int minutesLeftToday = ((bikeFrameFactory.getFinishHour() - startTime.getHour()) * 60) + (60 - startTime.getMinute());
             totalTimeInMinutes -= minutesLeftToday;
+            finishTime = finishTime.minusMinutes(((long) bikeFrameFactory.getWorkHours() * 60) - minutesLeftToday);
             finishTime = finishTime.plusDays(1);
         }
         int minutesWorkedOneDay = bikeFrameFactory.getWorkHours() * 60;
         while (totalTimeInMinutes > 0) {
-            if (!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            if ((!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+                    || ConstantValues.WEEKEND_SHIFTS) {
+                if (totalTimeInMinutes <= bikeFrameFactory.getWorkHours() * 60) {
+                    finishTime = finishTime.plusMinutes(totalTimeInMinutes);
+                    finishTime = finishTime.minusDays(1);
+                }
                 totalTimeInMinutes -= minutesWorkedOneDay;
-                lastWorkDayStarted = finishTime;
             }
             finishTime = finishTime.plusDays(1);
         }
-        if (totalTimeInMinutes < 0) {
-            finishTime = lastWorkDayStarted.plusMinutes(minutesWorkedOneDay - totalTimeInMinutes);
-        }
+
         return finishTime;
     }
 
@@ -192,7 +207,7 @@ public class RoDSStar {
         }
     }
 
-    private void calculateAvgStepTimes(Order order, Map<MachineType, Double> machinesPerStep) {
+    void calculateAvgStepTimes(Order order, Map<MachineType, Double> machinesPerStep) {
         machinesPerStep.replace(MachineType.CUTTER, order.getFrameType().getCutTime() / machinesPerStep.get(MachineType.CUTTER));
         machinesPerStep.replace(MachineType.BENDER, order.getFrameType().getBendTime() / machinesPerStep.get(MachineType.BENDER));
         machinesPerStep.replace(MachineType.WELDER, order.getFrameType().getWeldTime() / machinesPerStep.get(MachineType.WELDER));
@@ -204,4 +219,5 @@ public class RoDSStar {
     public void addOrder(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
         orders.add(new Order(orderId, frameType, quantity, deadline, profitPerPiece, penaltyPerDay));
     }
+
 }
