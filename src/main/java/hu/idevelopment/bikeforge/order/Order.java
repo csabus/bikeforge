@@ -1,7 +1,5 @@
 package hu.idevelopment.bikeforge.order;
 
-import hu.idevelopment.bikeforge.product.ProductType;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -32,7 +30,7 @@ public class Order {
         this.profit = profit;
         this.penalty = penalty;
         for (int i = 0; i < quantity; i++) {
-            orderItems.add(new OrderItem(productType));
+            orderItems.add(new OrderItem(id, productType));
         }
     }
 
@@ -74,7 +72,6 @@ public class Order {
 
     public double getActualProfit() {
         double actualPenalty = getActualPenalty();
-        //System.out.println(id + ": " + (profit * quantity - actualPenalty));
         return profit * quantity - actualPenalty;
     }
 

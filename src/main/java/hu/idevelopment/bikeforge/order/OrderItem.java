@@ -1,17 +1,18 @@
 package hu.idevelopment.bikeforge.order;
 
 import hu.idevelopment.bikeforge.helper.DateTimeHelper;
-import hu.idevelopment.bikeforge.product.ProductType;
 
 import java.time.LocalDateTime;
 
 public class OrderItem {
+    private String orderId;
     private final ProductType productType;
     private int processingTime = 0;
     private LocalDateTime startDate = DateTimeHelper.DEFAULT_START_DATE;
     private LocalDateTime finishDate = DateTimeHelper.DEFAULT_START_DATE;
 
-    public OrderItem(ProductType productType) {
+    public OrderItem(String orderId, ProductType productType) {
+        this.orderId = orderId;
         this.productType = productType;
     }
 
@@ -34,6 +35,10 @@ public class OrderItem {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
     @Override

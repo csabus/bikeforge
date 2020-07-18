@@ -48,12 +48,6 @@ public class BikeFactory {
             }
         }
         orderList.setOrders(optimalOrderList);
-        //System.out.println(orderList);
-        System.out.printf("%f%n", maxProfit);
-    }
-
-    public void buildWorkflow() {
-        //productionLine.buildWorkflow(orderList);
     }
 
     private void calculateActualDeadlines() {
@@ -68,4 +62,5 @@ public class BikeFactory {
     public void startProductionSimulation() {
         productionLine.startProductionSimulation(orderList);
     }
+
 }

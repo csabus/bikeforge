@@ -10,7 +10,7 @@ import java.util.Map;
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "factory")
-public class Config {
+public class MachineConfigReader {
     private List<MachineConfig> machineGroups;
 
     public List<MachineConfig> getMachineGroups() {

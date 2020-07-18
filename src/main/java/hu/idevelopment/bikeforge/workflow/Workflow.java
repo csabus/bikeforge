@@ -1,4 +1,4 @@
-package hu.idevelopment.bikeforge;
+package hu.idevelopment.bikeforge.workflow;
 
 import org.springframework.stereotype.Component;
 
@@ -11,6 +11,10 @@ public class Workflow {
 
     public void addItem(WorkflowItem item) {
         items.add(item);
+    }
+
+    public List<WorkflowItem> getItems() {
+        return items;
     }
 
     @Override

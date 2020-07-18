@@ -1,18 +1,21 @@
-package hu.idevelopment.bikeforge.output;
+package hu.idevelopment.bikeforge.order;
 
-import hu.idevelopment.bikeforge.order.Order;
-import hu.idevelopment.bikeforge.order.OrderList;
-import org.springframework.stereotype.Component;
-
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
-@Component
-public class Summary {
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM.dd. HH:mm");
-    private final DecimalFormat numberFormatter = new DecimalFormat("#,###");
+public class OrderListWriter {
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM.dd. HH:mm");
+    private static final DecimalFormat numberFormatter = new DecimalFormat("#,###");
 
-    public void printResult(OrderList orderList) {
+    private OrderListWriter() {
+    }
+
+    public static void writeResult(OrderList orderList, String fileName) {
         StringBuilder sb = new StringBuilder();
         sb.append("Megrendelésszám;Profit összesen;Levont kötbér;Munka megkezdése;Készrejelentés ideje;Megrendelés eredeti határideje\n");
         for (Order order : orderList.getOrders()) {
@@ -23,6 +26,11 @@ public class Summary {
             sb.append(order.getActualDeadline().format(dateFormatter)).append(";");
             sb.append(order.getDeadline().format(dateFormatter)).append(";\n");
         }
-        System.out.println(sb.toString());
+        Path path = Paths.get(fileName);
+        try {
+            Files.writeString(path, sb.toString(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,14 +1,13 @@
 package hu.idevelopment.bikeforge.factory;
 
-import hu.idevelopment.bikeforge.Workflow;
 import hu.idevelopment.bikeforge.helper.DateTimeHelper;
-import hu.idevelopment.bikeforge.machine.Config;
 import hu.idevelopment.bikeforge.machine.Machine;
+import hu.idevelopment.bikeforge.machine.MachineConfigReader;
 import hu.idevelopment.bikeforge.machine.MachineGroup;
 import hu.idevelopment.bikeforge.order.Order;
-import hu.idevelopment.bikeforge.order.OrderItem;
 import hu.idevelopment.bikeforge.order.OrderList;
-import hu.idevelopment.bikeforge.product.ProductType;
+import hu.idevelopment.bikeforge.order.ProductType;
+import hu.idevelopment.bikeforge.workflow.Workflow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +19,19 @@ import java.util.Map;
 @Component
 public class ProductionLine {
     private final List<MachineGroup> productionLineItems = new ArrayList<>();
-    private final Config config;
+    private final MachineConfigReader machineConfigReader;
     private final Workflow workflow;
 
     @Autowired
-    public ProductionLine(Config config, Workflow workflow) {
-        this.config = config;
+    public ProductionLine(MachineConfigReader machineConfigReader, Workflow workflow) {
+        this.machineConfigReader = machineConfigReader;
         this.workflow = workflow;
         buildProductionLine();
     }
 
     private void buildProductionLine() {
-        for (Config.MachineConfig machineConfig : config.getMachineGroups()) {
-            MachineGroup machineGroup = new MachineGroup();
+        for (MachineConfigReader.MachineConfig machineConfig : machineConfigReader.getMachineGroups()) {
+            MachineGroup machineGroup = new MachineGroup(workflow);
             for (String name : machineConfig.getNames()) {
                 Machine machine = new Machine(name);
                 setWorkingTimes(machine, machineConfig.getTimes());
@@ -96,26 +95,10 @@ public class ProductionLine {
             }
             order.setActualStartTime(startTime);
             for (MachineGroup machineGroup : productionLineItems) {
-                for (OrderItem orderItem : order.getOrderItems()) {
-                    machineGroup.addOrderItemToInputBuffer(orderItem);
-                }
+                machineGroup.setInputBuffer(order.getOrderItems());
                 machineGroup.startProduction();
             }
             order.setActualDeadlineByLastItemFinishDate();
-            //System.out.println(order.getId());
-            //System.out.println(order.getOrderItems());
         }
-        System.out.println(orderList);
-
-        /*for (Order order : orderList.getOrders()) {
-            for (MachineGroup machineGroup : productionLineItems) {
-                for (OrderItem orderItem : order.getOrderItems()) {
-                    machineGroup.addOrderItemToInputBuffer(orderItem);
-                }
-                machineGroup.startProduction();
-            }
-            System.out.println(order.getId());
-            System.out.println(order.getOrderItems());
-        }*/
     }
 }
