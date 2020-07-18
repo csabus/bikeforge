@@ -49,7 +49,7 @@ public class BikeforgeApplication implements CommandLineRunner {
         System.out.println("Profit: " + new DecimalFormat("#,###").format(orderList.calculateProfit()) + " Ft");
 
         OrderListWriter.writeResult(orderList, "megrendelesek.csv");
-        WorkflowWriter.writeResult(workflow, "munkarend.csv");
+        WorkflowWriter.writeResult(workflow, "munkarend2.csv");
 
         System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
     }

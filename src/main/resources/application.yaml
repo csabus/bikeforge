@@ -24,8 +24,8 @@ factory:
           SB: 10
       names:
         - HEGESZTŐ-1
-        - HEGESZTÓ-2
-        - HEGESZTÓ-3
+        - HEGESZTŐ-2
+        - HEGESZTŐ-3
     - times:
         - GYB: 5
           FB: 5

@@ -11,6 +11,7 @@ public class Machine {
     private final String name;
     private LocalDateTime workingStartTime;
     private LocalDateTime workingEndTime;
+    private int workingDuration;
     private String workingOrderId;
     private int workingAmount;
 
@@ -33,6 +34,7 @@ public class Machine {
     public void resetWorking() {
         workingStartTime = null;
         workingEndTime = null;
+        workingDuration = 0;
         workingOrderId = null;
         workingAmount = 0;
     }
@@ -55,6 +57,14 @@ public class Machine {
 
     public void setWorkingEndTime(LocalDateTime workingEndTime) {
         this.workingEndTime = workingEndTime;
+    }
+
+    public int getWorkingDuration() {
+        return workingDuration;
+    }
+
+    public void setWorkingDuration(int workingDuration) {
+        this.workingDuration = workingDuration;
     }
 
     public String getWorkingOrderId() {

@@ -3,7 +3,6 @@ package hu.idevelopment.bikeforge.machine;
 import hu.idevelopment.bikeforge.helper.DateTimeHelper;
 import hu.idevelopment.bikeforge.order.OrderItem;
 import hu.idevelopment.bikeforge.workflow.Workflow;
-import hu.idevelopment.bikeforge.workflow.WorkflowItem;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,17 +59,25 @@ public class MachineGroup {
 
             if (i >= inputBuffer.size() - machineList.size()) {
                 machine.setWorkingEndTime(orderItem.getFinishDate());
+                machine.setWorkingDuration(orderItem.getProcessingTime());
             }
         }
 
         for (Machine machine : machineList) {
-            WorkflowItem workflowItem = new WorkflowItem(
+            System.out.println(machine);
+            /*WorkflowItem workflowItem = new WorkflowItem(
                     machine.getWorkingStartTime(),
                     machine.getWorkingEndTime(),
                     machine.getName(),
                     machine.getWorkingOrderId(),
                     machine.getWorkingAmount());
-            workflow.addItem(workflowItem);
+            workflow.addItem(workflowItem);*/
+            workflow.createWorkflowItems(
+                    machine.getWorkingStartTime(),
+                    machine.getWorkingEndTime(),
+                    machine.getName(),
+                    machine.getWorkingOrderId(),
+                    machine.getWorkingAmount());
         }
     }
 
