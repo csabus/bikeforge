@@ -33,24 +33,28 @@ public class BikeforgeApplication implements CommandLineRunner {
     public void run(String... args) {
         long start = System.nanoTime();
 
-        if (args.length == 1) {
+        if (args.length == 3) {
             try {
                 String orderInputFile = args[0];
                 orderList.loadOrdersFromFile(orderInputFile);
+
+                factory.findOptimalSequence();
+
+                factory.startProductionSimulation();
+
+                System.out.println("Profit: " + new DecimalFormat("#,###").format(orderList.calculateProfit()) + " Ft");
+
+                OrderListWriter.writeResult(orderList, args[1]);
+                WorkflowWriter.writeResult(workflow, args[2]);
+
+                System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         } else {
-            System.out.println("Missing input file");
+            System.out.println("Missing input parameter");
+            System.out.println("[input.csv] [megrendelesek.csv] [munkarend.csv]");
         }
-        factory.findOptimalSequence();
-        factory.startProductionSimulation();
-
-        System.out.println("Profit: " + new DecimalFormat("#,###").format(orderList.calculateProfit()) + " Ft");
-
-        OrderListWriter.writeResult(orderList, "megrendelesek.csv");
-        WorkflowWriter.writeResult(workflow, "munkarend.csv");
-
-        System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
     }
 }
