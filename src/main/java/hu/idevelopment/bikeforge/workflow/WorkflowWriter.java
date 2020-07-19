@@ -18,7 +18,7 @@ public class WorkflowWriter {
     public static void writeResult(Workflow workflow, String fileName) {
         workflow.getItems().sort((Comparator.comparing(WorkflowItem::getStartTime)));
         StringBuilder sb = new StringBuilder();
-        sb.append("Dátum;Ǵép;Kezdő időpont;Záró időpont;Megrendelésszám\n");
+        sb.append("Dátum;Gép;Kezdő időpont;Záró időpont;Megrendelésszám\n");
         for (WorkflowItem item : workflow.getItems()) {
             sb.append(dateFormatter.format(item.getStartTime())).append(";");
             sb.append(item.getMachineName()).append(";");
