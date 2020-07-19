@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 
 @SpringBootApplication
 public class BikeforgeApplication implements CommandLineRunner {
+    private static final String IN_OUT_FOLDER = "in-out/";
     private final BikeFactory factory;
     private final OrderList orderList;
     private final Workflow workflow;
@@ -35,7 +36,7 @@ public class BikeforgeApplication implements CommandLineRunner {
 
         if (args.length == 3) {
             try {
-                String orderInputFile = args[0];
+                String orderInputFile = IN_OUT_FOLDER + args[0];
                 orderList.loadOrdersFromFile(orderInputFile);
 
                 factory.findOptimalSequence();
@@ -44,8 +45,8 @@ public class BikeforgeApplication implements CommandLineRunner {
 
                 System.out.println("Profit: " + new DecimalFormat("#,###").format(orderList.calculateProfit()) + " Ft");
 
-                OrderListWriter.writeResult(orderList, args[1]);
-                WorkflowWriter.writeResult(workflow, args[2]);
+                OrderListWriter.writeResult(orderList, IN_OUT_FOLDER + args[1]);
+                WorkflowWriter.writeResult(workflow, IN_OUT_FOLDER + args[2]);
 
                 System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
 
