@@ -1,7 +1,14 @@
 # Getting Started
 
-### Reference Documentation
+### Run jar file
+- create a folder named 'in-out' next to bikeforge-1.0.jar
+- put the input.csv in 'in-out' folder
+- run the following command:
+java -jar bikeforge-1.0.jar input.csv megrendelesek.csv munkarend.csv
+- the ouput files (megrendelesek.csv, munkarend.csv) fill we created in 'in-out' folder
 
-- copy input.csv to an empty folder, the results will be created in the same folder.
-- run the following command (on Windows use PowerShell): 
+### Run from docker
+- copy input.csv to an empty folder
+- run the following command from this folder (on Windows use PowerShell): 
 docker run -v ${PWD}:/usr/src/app/in-out csabus/bikeforge:latest input.csv megrendelesek.csv munkarend.csv
+- the ouput files (megrendelesek.csv, munkarend.csv) fill we created next to input.csv
