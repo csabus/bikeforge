@@ -19,7 +19,9 @@ public class OrderList {
         List<String> lines = Files.readAllLines(path);
         for (String line : lines) {
             Order order = Order.newOrder(line);
-            orders.add(order);
+            if (order != null) {
+                orders.add(order);
+            }
         }
         orders.sort(Comparator.comparing(Order::getDeadline));
         //orders.sort(Comparator.comparingInt(Order::getQuantity));

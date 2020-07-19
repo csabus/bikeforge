@@ -42,10 +42,24 @@ public class Order {
             if (items.length == 6) {
                 String id = items[0];
                 ProductType productType = ProductType.valueOf(items[1]);
+
                 int quantity = Integer.parseInt(items[2]);
+                if (quantity <= 0) {
+                    throw new InputMismatchException(quantity + "");
+                }
+
                 LocalDateTime deadline = LocalDateTime.parse(year + "." + items[3], formatter);
+
                 long profit = Long.parseLong(items[4]);
+                if (profit <= 0) {
+                    throw new InputMismatchException(profit + "");
+                }
+
                 long penalty = Long.parseLong(items[5].replace(" ", ""));
+                if (penalty < 0) {
+                    throw new InputMismatchException(penalty + "");
+                }
+
                 order = new Order(id, productType, quantity, deadline, profit, penalty);
             }
         } catch (Exception ex) {

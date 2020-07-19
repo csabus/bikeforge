@@ -17,7 +17,7 @@ public class OrderListWriter {
 
     public static void writeResult(OrderList orderList, String fileName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Megrendelésszám;Profit összesen;Levont kötbér;Munka megkezdése;Készrejelentés ideje;Megrendelés eredeti határideje\n");
+        sb.append("Megrendelésszám;Profit összesen;Levont kötbér;Munka megkezdése;Készrejelentés ideje;Megrendelés eredeti határideje\n");
         for (Order order : orderList.getOrders()) {
             sb.append(order.getId()).append(";");
             sb.append(numberFormatter.format(order.getActualProfit())).append(" Ft;");
