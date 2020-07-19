@@ -10,7 +10,7 @@
     </parent>
     <groupId>hu.idevelopment</groupId>
     <artifactId>bikeforge</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>bikeforge</name>
     <description>Bike forge optimization</description>
 

@@ -24,7 +24,7 @@ public class OrderListWriter {
             sb.append(numberFormatter.format(order.getActualPenalty())).append(" Ft;");
             sb.append(order.getActualStartTime().format(dateFormatter)).append(";");
             sb.append(order.getActualDeadline().format(dateFormatter)).append(";");
-            sb.append(order.getDeadline().format(dateFormatter)).append(";\n");
+            sb.append(order.getDeadline().format(dateFormatter)).append("\n");
         }
         Path path = Paths.get(fileName);
         try {

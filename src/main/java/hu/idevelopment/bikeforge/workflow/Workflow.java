@@ -28,13 +28,11 @@ public class Workflow {
             LocalDateTime startDayEnd = LocalDateTime.of(start.toLocalDate(), DateTimeHelper.WORK_END);
             long dayMinutes = ChronoUnit.MINUTES.between(start, startDayEnd);
             if (dayMinutes >= remainMinutes) {
-                int actualQuantity = (int) ((quantity * remainMinutes) / totalDuration);
-                WorkflowItem item = new WorkflowItem(start, start.plusMinutes(remainMinutes), machineName, orderId, actualQuantity);
+                WorkflowItem item = new WorkflowItem(start, start.plusMinutes(remainMinutes), machineName, orderId, quantity);
                 items.add(item);
                 break;
             }
-            int actualQuantity = (int) ((quantity * dayMinutes) / totalDuration * (1440 / DateTimeHelper.NOT_WORKING_MINUTES));
-            WorkflowItem item = new WorkflowItem(start, startDayEnd, machineName, orderId, actualQuantity);
+            WorkflowItem item = new WorkflowItem(start, startDayEnd, machineName, orderId, quantity);
             items.add(item);
             start = LocalDateTime.of(start.toLocalDate().plusDays(1), DateTimeHelper.WORK_START);
             remainMinutes -= dayMinutes;

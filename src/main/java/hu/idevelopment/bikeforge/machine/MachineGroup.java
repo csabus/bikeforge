@@ -64,7 +64,6 @@ public class MachineGroup {
         }
 
         for (Machine machine : machineList) {
-            System.out.println(machine);
             /*WorkflowItem workflowItem = new WorkflowItem(
                     machine.getWorkingStartTime(),
                     machine.getWorkingEndTime(),
