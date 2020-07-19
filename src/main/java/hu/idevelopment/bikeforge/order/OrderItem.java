@@ -33,10 +33,6 @@ public class OrderItem {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDateTime finishDate) {
-        this.finishDate = finishDate;
-    }
-
     public String getOrderId() {
         return orderId;
     }

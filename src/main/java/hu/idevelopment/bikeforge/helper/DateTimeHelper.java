@@ -8,6 +8,7 @@ public class DateTimeHelper {
     public static final LocalDateTime DEFAULT_START_DATE = LocalDateTime.of(2020, 7, 20, 6, 0, 0);
     public static final LocalTime WORK_START = LocalTime.of(6, 0, 0);
     public static final LocalTime WORK_END = LocalTime.of(22, 0, 0);
+    public static final int DAY_MINUTES = 1440;
     public static final int NOT_WORKING_MINUTES = 480;
 
     private DateTimeHelper() {
@@ -24,13 +25,12 @@ public class DateTimeHelper {
         long remainMinutes = minutes - dayRemainMinutes;
         while (remainMinutes > 0) {
             dayStart = dayStart.plusDays(1);
-            //startDayEnd = LocalDateTime.of(dayStart.getYear(), dayStart.getMonth(), dayStart.getDayOfMonth(), 22, 0, 0);
             startDayEnd = LocalDateTime.of(dayStart.toLocalDate(), WORK_END);
             dayRemainMinutes = ChronoUnit.MINUTES.between(dayStart, startDayEnd);
             remainMinutes -= dayRemainMinutes;
         }
 
-        return dayStart.plusMinutes(960 + remainMinutes);
+        return dayStart.plusMinutes(DAY_MINUTES - NOT_WORKING_MINUTES + remainMinutes);
     }
 
 }

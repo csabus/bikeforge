@@ -31,10 +31,6 @@ public class MachineGroup {
         return machineList.get(index);
     }
 
-    public List<Machine> getMachineList() {
-        return machineList;
-    }
-
     public void setInputBuffer(List<OrderItem> inputBuffer) {
         this.inputBuffer = inputBuffer;
     }
@@ -56,8 +52,7 @@ public class MachineGroup {
             int orderItemProcessingTime = machine.getWorkingTime(orderItem.getProductType());
             processingTimes.set(machineIndex, Math.max(processingTimes.get(machineIndex), orderItem.getProcessingTime()) + orderItemProcessingTime);
             orderItem.setProcessingTime(processingTimes.get(machineIndex));
-            System.out.println(machine);
-            System.out.println(orderItem);
+
             if (i >= inputBuffer.size() - machineList.size()) {
                 machine.setWorkingEndTime(orderItem.getFinishDate());
                 machine.setWorkingDuration(orderItem.getProcessingTime());

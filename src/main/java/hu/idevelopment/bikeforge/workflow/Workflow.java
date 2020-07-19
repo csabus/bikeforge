@@ -10,11 +10,7 @@ import java.util.List;
 
 @Component
 public class Workflow {
-    private List<WorkflowItem> items = new ArrayList<>();
-
-    public void addItem(WorkflowItem item) {
-        items.add(item);
-    }
+    private final List<WorkflowItem> items = new ArrayList<>();
 
     public List<WorkflowItem> getItems() {
         return items;
@@ -22,8 +18,7 @@ public class Workflow {
 
     public void createWorkflowItems(LocalDateTime startTime, LocalDateTime endTime, String machineName, String orderId, int quantity) {
         LocalDateTime start = startTime.plusMinutes(0);
-        long totalDuration = ChronoUnit.MINUTES.between(startTime, endTime);
-        long remainMinutes = totalDuration;
+        long remainMinutes = ChronoUnit.MINUTES.between(startTime, endTime);
         while (remainMinutes > 0) {
             LocalDateTime startDayEnd = LocalDateTime.of(start.toLocalDate(), DateTimeHelper.WORK_END);
             long dayMinutes = ChronoUnit.MINUTES.between(start, startDayEnd);

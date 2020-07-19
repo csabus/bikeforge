@@ -59,10 +59,6 @@ public class Machine {
         this.workingEndTime = workingEndTime;
     }
 
-    public int getWorkingDuration() {
-        return workingDuration;
-    }
-
     public void setWorkingDuration(int workingDuration) {
         this.workingDuration = workingDuration;
     }

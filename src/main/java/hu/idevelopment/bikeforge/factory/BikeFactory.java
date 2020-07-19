@@ -26,9 +26,11 @@ public class BikeFactory {
 
     public void findOptimalSequence() {
         calculateActualDeadlines();
+
         List<Order> optimalOrderList = orderList.getOrders();
         double maxProfit = orderList.calculateProfit();
         boolean isOptimal = false;
+
         while (!isOptimal) {
             int numberOfChanges = 0;
             for (int i = 0; i < orderList.getOrders().size() - 1; i++) {
@@ -47,6 +49,7 @@ public class BikeFactory {
                 isOptimal = true;
             }
         }
+
         orderList.setOrders(optimalOrderList);
     }
 
