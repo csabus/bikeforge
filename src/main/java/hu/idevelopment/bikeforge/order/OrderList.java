@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -20,7 +21,10 @@ public class OrderList {
             Order order = Order.newOrder(line);
             orders.add(order);
         }
-        orders.sort((o1, o2) -> o1.getDeadline().compareTo(o2.getDeadline()));
+        orders.sort(Comparator.comparing(Order::getDeadline));
+        //orders.sort(Comparator.comparingInt(Order::getQuantity));
+        //orders.sort((o1, o2) -> Double.compare(o2.getPenalty(), o1.getPenalty()));
+
     }
 
     public List<Order> getOrders() {

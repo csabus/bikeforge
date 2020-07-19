@@ -49,7 +49,7 @@ public class Order {
                 order = new Order(id, productType, quantity, deadline, profit, penalty);
             }
         } catch (Exception ex) {
-            throw new InputMismatchException("Wrong input");
+            throw new InputMismatchException("Wrong input: " + ex.getMessage());
         }
         return order;
     }
@@ -110,6 +110,10 @@ public class Order {
 
     public LocalDateTime getActualDeadline() {
         return actualDeadline;
+    }
+
+    public long getPenalty() {
+        return penalty;
     }
 
     @Override

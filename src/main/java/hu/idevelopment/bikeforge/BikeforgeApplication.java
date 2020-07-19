@@ -10,7 +10,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.InputMismatchException;
 
 @SpringBootApplication
 public class BikeforgeApplication implements CommandLineRunner {
@@ -50,8 +52,10 @@ public class BikeforgeApplication implements CommandLineRunner {
 
                 System.out.println("Time elapsed: " + ((double) (System.nanoTime() - start) / (double) (1000000000)) + " s");
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (IOException ex) {
+                System.out.println("Input file not found: " + ex.getMessage());
+            } catch (InputMismatchException ex) {
+                System.out.println(ex.getMessage());
             }
         } else {
             System.out.println("Missing input parameter");
